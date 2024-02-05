@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+</head>
+<body>
+
+  <h1>To-Do List</h1>
+
+  <form id="todoForm">
+    <label for="task">Task:</label>
+    <input type="text" id="task" name="task" required>
+    <button type="button" onclick="addTodo()">Add Task</button>
+  </form>
+
+  <h2>My To-Do List:</h2>
+  <ul id="todoList"></ul>
+
+  <script>
+    async function addTodo() {
+      const taskInput = document.getElementById('task');
+      const task = taskInput.value;
+
+      if (!task) {
+        alert('Please enter a task.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/todos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ task }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to add task');
+        }
+
+        const newTodo = await response.json();
+        displayTodoItem(newTodo);
+        taskInput.value = ''; // Clear input field
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while adding the task.');
+      }
+    }
+
+    async function fetchTodos() {
+      try {
+        const response = await fetch('http://localhost:3000/api/todos');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch tasks');
+        }
+
+        const todos = await response.json();
+        displayTodoList(todos);
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching tasks.');
+      }
+    }
+
+    function displayTodoItem(todo) {
+      const todoList = document.getElementById('todoList');
+      const listItem = document.createElement('li');
+      listItem.textContent = todo.task;
+      todoList.appendChild(listItem);
+    }
+
+    function displayTodoList(todos) {
+      const todoList = document.getElementById('todoList');
+      todoList.innerHTML = ''; // Clear existing list
+
+      todos.forEach(todo => {
+        displayTodoItem(todo);
+      });
+    }
+
+    // Fetch initial To-Do list on page load
+    fetchTodos();
+  </script>
+
+</body>
+</html>
