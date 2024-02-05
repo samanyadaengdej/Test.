@@ -43,7 +43,7 @@
 
         const newTodo = await response.json();
         displayTodoItem(newTodo);
-        taskInput.value = ''; // Clear input field
+        taskInput.value = '';
       } catch (error) {
         console.error(error);
         alert('An error occurred while adding the task.');
@@ -75,14 +75,14 @@
 
     function displayTodoList(todos) {
       const todoList = document.getElementById('todoList');
-      todoList.innerHTML = ''; // Clear existing list
+      todoList.innerHTML = ''; 
 
       todos.forEach(todo => {
         displayTodoItem(todo);
       });
     }
 
-    // Fetch initial To-Do list on page load
+    
     fetchTodos();
   </script>
 
