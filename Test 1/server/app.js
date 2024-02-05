@@ -43,7 +43,7 @@ app.put('/api/todos/:id', (req, res) => {
   }
 
   todoList[todoIndex].completed = completed;
-  res.json(todoList[todoIndex]); // Respond with the modified to-do item
+  res.json(todoList[todoIndex]); 
 });
 
 
